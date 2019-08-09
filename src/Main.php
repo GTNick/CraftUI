@@ -3,7 +3,6 @@ namespace CustomCraftingUI;
 
 use jojoe77777\Formapi\SimpleForm;
 use jojoe77777\Formapi\CustomForm;
-
 use pocketmine\Server;
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
@@ -15,37 +14,19 @@ use pocketmine\command\CommandExecutor;
 use pocketmine\command\ConsoleCommandSender;
 class Main extends PluginBase implements Listener {
 
-    public function onEnable() {
-        $api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
-        if($api === null){
-            $this->getServer()->getPluginManager()->disablePlugin($this);
+public function  sendTestForm(Player $player) {
+        $api = Server::getInstance()->getPluginManager()->getPlugin("FormAPI");
+        if ($api === null || $api->isDisabled()) {
+            return;
         }
-    }
-
-    public function onCommand(CommandSender $sender, Command $cmd, string $label,array $args) : bool {
-        switch($cmd->getName()){
-            case "CCraft":
-                if($sender instanceof Player) {
-                    $api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
-                    $form = $api->createSimpleForm(function (Player $sender, $data){
-                    $result = $data[0];
-
-                    if($result === null){
-                        return true;
-                     }
-                    });
-                    
-                    $form->setTitle("CCraft");
-                    $form->setContent("Please choose your destination.");
-                    $form->addButton(TextFormat::BOLD . "CustomeItem");
-                    $form->sendToPlayer($sender);
-                }
-                else{
-                    $sender->sendMessage(TextFormat::RED . "Use this Command in-game.");
-                    return true;
-                }
-            break;
-        }
-        return true;
-    }
-}
+        $form = $api->createSimpleForm(function (Player $sender, ?int $result = null) {
+            if ($result === null) {
+                return true;
+            }
+         });
+       
+        $form->setTitle("Custom Crafting");
+        $form->setContent("Recipes");
+        $form->addButton("Filler", SimpleForm::IMAGE_TYPE_URL , "diamondsword.png");
+        $form->addButton("Filler", SimpleForm::IMAGE_TYPE_URL ,  "goldarrow.png");
+        $form->sendToPlayer($player);
