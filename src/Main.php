@@ -24,7 +24,7 @@ class Main extends PluginBase implements Listener {
 
     public function onCommand(CommandSender $sender, Command $cmd, string $label,array $args) : bool {
         switch($cmd->getName()){
-            case "Custom Item here":
+            case "CCraft":
                 if($sender instanceof Player) {
                     $api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
                     $form = $api->createSimpleForm(function (Player $sender, $data){
@@ -35,7 +35,7 @@ class Main extends PluginBase implements Listener {
                      }
                     });
                     
-                    $form->setTitle("Custom Recipe");
+                    $form->setTitle("CCraft");
                     $form->setContent("Please choose your destination.");
                     $form->addButton(TextFormat::BOLD . "CustomeItem");
                     $form->sendToPlayer($sender);
